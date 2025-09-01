@@ -1,9 +1,9 @@
-package zikxewen.productive_cats.common.data_component
+package zikxewen.productive_cats.common.data
 
-import com.mojang.serialization.codecs.RecordCodecBuilder
 import com.mojang.serialization.Codec
-import net.minecraft.network.codec.StreamCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 
 data class CatData(val type: String, val speed: Int, val productivity: Int) {
   companion object {
