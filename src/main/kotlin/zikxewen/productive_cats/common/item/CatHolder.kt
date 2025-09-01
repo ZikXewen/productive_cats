@@ -1,0 +1,47 @@
+package zikxewen.productive_cats.common.item
+
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.context.UseOnContext
+import net.minecraft.world.level.block.state.BlockState
+import zikxewen.productive_cats.common.data_component.DataComponentRegistries
+import zikxewen.productive_cats.common.entity.EntityRegistries
+
+class CatHolder(props: Properties) : Item(props) {
+  override fun interactLivingEntity(
+    stack: ItemStack,
+    player: Player,
+    entity: LivingEntity,
+    hand: InteractionHand
+  ): InteractionResult {
+    super.interactLivingEntity(stack, player, entity, hand)
+    if (entity.type != EntityRegistries.PRODUCTIVE_CAT || stack.get(DataComponentRegistries.CAT_DATA) != null) return InteractionResult.PASS
+    val data = entity.get(DataComponentRegistries.CAT_DATA)
+    entity.remove(Entity.RemovalReason.DISCARDED)
+    stack.set(DataComponentRegistries.CAT_DATA, data)
+    return InteractionResult.SUCCESS
+  }
+
+  override fun useOn(ctx: UseOnContext): InteractionResult {
+    super.useOn(ctx)
+    val data = ctx.itemInHand.get(DataComponentRegistries.CAT_DATA)
+    if (data == null) return InteractionResult.PASS
+    if (!ctx.level.isClientSide) {
+      val cat = EntityRegistries.PRODUCTIVE_CAT.spawn(ctx.level as ServerLevel, ctx.clickedPos.relative(ctx.clickedFace), EntitySpawnReason.SPAWN_ITEM_USE)
+      if (cat == null) return InteractionResult.PASS
+      ctx.itemInHand.remove(DataComponentRegistries.CAT_DATA)
+      cat.setComponent(DataComponentRegistries.CAT_DATA, data)
+      ctx.level.addFreshEntity(cat)
+    }
+    return InteractionResult.SUCCESS
+  }
+
+  override fun getDestroySpeed(stack: ItemStack, block: BlockState) = 0f
+}
