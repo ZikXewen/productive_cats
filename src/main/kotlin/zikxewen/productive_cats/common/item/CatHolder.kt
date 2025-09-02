@@ -26,10 +26,7 @@ class CatHolder(props: Properties) : Item(props.stacksTo(1)) {
     if (!player.level().isClientSide) {
       val data = entity.getData(DataRegistries.CAT_DATA_ATTACHMENT)
       entity.remove(Entity.RemovalReason.DISCARDED)
-      val newStack = ItemStack(ItemRegistries.CAT_HOLDER)
-      newStack.set(DataRegistries.CAT_DATA_COMPONENT, data)
-      if(!player.addItem(newStack)) player.drop(newStack, false)
-      stack.shrink(1)
+      player.getItemInHand(hand).set(DataRegistries.CAT_DATA_COMPONENT, data)
     }
     return InteractionResult.SUCCESS
   }
@@ -42,9 +39,7 @@ class CatHolder(props: Properties) : Item(props.stacksTo(1)) {
       val cat = EntityRegistries.PRODUCTIVE_CAT.spawn(ctx.level as ServerLevel, ctx.clickedPos.relative(ctx.clickedFace), EntitySpawnReason.SPAWN_ITEM_USE)
       if (cat == null) return InteractionResult.PASS
       cat.setData(DataRegistries.CAT_DATA_ATTACHMENT, data)
-      val newStack = ItemStack(ItemRegistries.CAT_HOLDER)
-      if(!(ctx.player?.addItem(newStack) ?: false)) ctx.player?.drop(newStack, false)
-      ctx.itemInHand.shrink(1)
+      ctx.itemInHand.remove(DataRegistries.CAT_DATA_COMPONENT)
     }
     return InteractionResult.SUCCESS
   }
