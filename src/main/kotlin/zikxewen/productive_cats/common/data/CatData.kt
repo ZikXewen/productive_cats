@@ -7,6 +7,7 @@ import net.minecraft.network.codec.StreamCodec
 
 data class CatData(val type: String, val speed: Int, val productivity: Int) {
   companion object {
+    val DEFAULT = CatData("default", 1, 1)
     val CODEC = RecordCodecBuilder.create {
       it.group(
         Codec.STRING.fieldOf("type").forGetter(CatData::type),

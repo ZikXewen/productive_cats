@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.BlockState
 import zikxewen.productive_cats.common.data.DataRegistries
 import zikxewen.productive_cats.common.entity.EntityRegistries
 
-class CatHolder(props: Properties) : Item(props) {
+class CatHolder(props: Properties) : Item(props.stacksTo(1)) {
   override fun interactLivingEntity(
     stack: ItemStack,
     player: Player,
@@ -23,9 +23,14 @@ class CatHolder(props: Properties) : Item(props) {
   ): InteractionResult {
     super.interactLivingEntity(stack, player, entity, hand)
     if (entity.type != EntityRegistries.PRODUCTIVE_CAT || stack.get(DataRegistries.CAT_DATA_COMPONENT) != null) return InteractionResult.PASS
-    val data = entity.getData(DataRegistries.CAT_DATA_ATTACHMENT)
-    entity.remove(Entity.RemovalReason.DISCARDED)
-    stack.set(DataRegistries.CAT_DATA_COMPONENT, data)
+    if (!player.level().isClientSide) {
+      val data = entity.getData(DataRegistries.CAT_DATA_ATTACHMENT)
+      entity.remove(Entity.RemovalReason.DISCARDED)
+      val newStack = ItemStack(ItemRegistries.CAT_HOLDER)
+      newStack.set(DataRegistries.CAT_DATA_COMPONENT, data)
+      if(!player.addItem(newStack)) player.drop(newStack, false)
+      stack.shrink(1)
+    }
     return InteractionResult.SUCCESS
   }
 
@@ -36,9 +41,10 @@ class CatHolder(props: Properties) : Item(props) {
     if (!ctx.level.isClientSide) {
       val cat = EntityRegistries.PRODUCTIVE_CAT.spawn(ctx.level as ServerLevel, ctx.clickedPos.relative(ctx.clickedFace), EntitySpawnReason.SPAWN_ITEM_USE)
       if (cat == null) return InteractionResult.PASS
-      ctx.itemInHand.remove(DataRegistries.CAT_DATA_COMPONENT)
       cat.setData(DataRegistries.CAT_DATA_ATTACHMENT, data)
-      ctx.level.addFreshEntity(cat)
+      val newStack = ItemStack(ItemRegistries.CAT_HOLDER)
+      if(!(ctx.player?.addItem(newStack) ?: false)) ctx.player?.drop(newStack, false)
+      ctx.itemInHand.shrink(1)
     }
     return InteractionResult.SUCCESS
   }
