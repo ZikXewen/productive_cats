@@ -20,7 +20,7 @@ object RecipeRegistries {
             RecipeType.simple<CatBreedingRecipe>(loc)
           }
   val CAT_BREEDING_SERIALIZER: RecipeSerializer<CatBreedingRecipe> by
-          SERIALIZER_REGISTRY.register("cat_breeding") { -> CatBreedingRecipe.Serializer() }
+          SERIALIZER_REGISTRY.register("cat_breeding", CatBreedingRecipe::Serializer)
   val CAT_BREEDING_CATEGORY: RecipeBookCategory by
-          CATEGORY_REGISTRY.register("cat_breeding") { -> CatBreedingRecipe.Category() }
+          CATEGORY_REGISTRY.register("cat_breeding", CatBreedingRecipe::Category)
 }
