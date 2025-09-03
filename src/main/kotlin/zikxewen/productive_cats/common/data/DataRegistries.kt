@@ -24,4 +24,8 @@ object DataRegistries {
           ATTACHMENT_REGISTRY.register("cat_data") { ->
             AttachmentType.builder { -> CatData.DEFAULT }.sync(CatData.STREAM_CODEC).build()
           }
+  val CAT_DATA_ATTACHMENT_2: AttachmentType<CatData> by
+          ATTACHMENT_REGISTRY.register("cat_data_2") { ->
+            AttachmentType.builder { -> CatData.DEFAULT }.sync(CatData.STREAM_CODEC).build()
+          }
 }

@@ -21,13 +21,12 @@ class CatProvider(
   ProductiveCats.MOD_ID
 ) {
   override fun gather() {
-    register("test_cat_1", 0, 0)
-    register("test_cat_2", 0, 0)
-    register("test_cat_3", 0, 0)
-    register(Data("test_cat_4", 0, 0).unique().rarity(Rarity.EPIC))
+    Data("test_cat_1", 0, 0).save()
+    Data("test_cat_2", 0, 0).save()
+    Data("test_cat_3", 0, 0).save()
+    Data("test_cat_4", 0, 0).unique().rarity(Rarity.EPIC).save()
   }
-  fun register(cat: Data) = unconditional(ProductiveCats.rl(cat.type), cat)
-  fun register(type: String, col1: Int, col2: Int) = register(Data(type, col1, col2))
+  fun Data.save() = unconditional(ProductiveCats.rl(this.type), this)
   class Data(
     val type: String, 
     val primaryColor: Int,

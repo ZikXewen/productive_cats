@@ -21,6 +21,7 @@ object ProductiveCats {
     RecipeRegistries.SERIALIZER_REGISTRY.register(MOD_BUS)
     RecipeRegistries.CATEGORY_REGISTRY.register(MOD_BUS)
     BlockRegistries.REGISTRY.register(MOD_BUS)
+    BlockRegistries.BE_REGISTRY.register(MOD_BUS)
     ItemRegistries.REGISTRY.register(MOD_BUS)
   }
 }
