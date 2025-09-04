@@ -1,5 +1,6 @@
 {
   "block.productive_cats.cat_breeder": "Cat Breeder",
+  "block.productive_cats.cat_house": "Cat House",
   "entity.productive_cats.productive_cat": "Productive Cat",
   "item.productive_cats.cat_holder": "Cat Holder"
 }

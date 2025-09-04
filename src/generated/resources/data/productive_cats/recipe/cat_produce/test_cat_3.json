@@ -1,0 +1,12 @@
+{
+  "type": "productive_cats:cat_produce",
+  "cat": "test_cat_3",
+  "result": [
+    {
+      "chance": 50.0,
+      "item": "minecraft:diamond",
+      "max": 4,
+      "min": 2
+    }
+  ]
+}

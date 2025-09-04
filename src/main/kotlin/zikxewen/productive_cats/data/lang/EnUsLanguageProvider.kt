@@ -12,6 +12,7 @@ class EnUsLanguageProvider(val output: PackOutput) :
   override fun addTranslations() {
     add(ItemRegistries.CAT_HOLDER, "Cat Holder")
     add(BlockRegistries.CAT_BREEDER, "Cat Breeder")
+    add(BlockRegistries.CAT_HOUSE, "Cat House")
     add(EntityRegistries.PRODUCTIVE_CAT, "Productive Cat")
     // TODO: Find a way to rename cats per type
   }

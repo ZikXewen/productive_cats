@@ -16,6 +16,7 @@ import net.minecraft.world.item.crafting.RecipeBookCategory
 import net.minecraft.world.item.crafting.RecipeInput
 import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.level.Level
+import zikxewen.productive_cats.ProductiveCats
 
 class CatProduceRecipe(val result: List<Output>, val cat: String): Recipe<CatProduceRecipe.Input> {
   override fun getSerializer() = RecipeRegistries.CAT_PRODUCE_SERIALIZER
@@ -24,8 +25,10 @@ class CatProduceRecipe(val result: List<Output>, val cat: String): Recipe<CatPro
   override fun isSpecial() = true
   override fun assemble(input: Input, registries: HolderLookup.Provider) = ItemStack.EMPTY
   override fun placementInfo() = PlacementInfo.NOT_PLACEABLE
-  override fun matches(input: Input, level: Level) =
-    input.cat == cat
+  override fun matches(input: Input, level: Level): Boolean {
+    ProductiveCats.LOGGER.info("Trying to match ${input.cat} with ${cat}")
+    return input.cat == cat
+  }
 
   class Input(val cat: String): RecipeInput {
     override fun getItem(slot: Int) = ItemStack.EMPTY

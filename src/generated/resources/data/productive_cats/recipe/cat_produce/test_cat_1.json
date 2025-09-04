@@ -1,0 +1,11 @@
+{
+  "type": "productive_cats:cat_produce",
+  "cat": "test_cat_1",
+  "result": [
+    {
+      "item": "minecraft:oak_log",
+      "max": 4,
+      "min": 4
+    }
+  ]
+}

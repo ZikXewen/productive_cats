@@ -1,0 +1,12 @@
+{
+  "type": "productive_cats:cat_produce",
+  "cat": "test_cat_4",
+  "result": [
+    {
+      "chance": 20.0,
+      "item": "minecraft:ancient_debris",
+      "max": 1,
+      "min": 1
+    }
+  ]
+}

@@ -8,10 +8,12 @@ import zikxewen.productive_cats.common.data.DataRegistries
 import zikxewen.productive_cats.common.entity.EntityRegistries
 import zikxewen.productive_cats.common.item.ItemRegistries
 import zikxewen.productive_cats.common.recipe.RecipeRegistries
+import org.apache.logging.log4j.LogManager
 
 @Mod(ProductiveCats.MOD_ID)
 object ProductiveCats {
   const val MOD_ID = "productive_cats"
+  val LOGGER = LogManager.getLogger(MOD_ID)
   fun rl(path: String) = ResourceLocation.fromNamespaceAndPath(MOD_ID, path)
   init {
     DataRegistries.ATTACHMENT_REGISTRY.register(MOD_BUS)

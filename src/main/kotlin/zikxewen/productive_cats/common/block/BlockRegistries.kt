@@ -14,4 +14,9 @@ object BlockRegistries {
           BE_REGISTRY.register("cat_breeder") { ->
             BlockEntityType(::CatBreederEntity, CAT_BREEDER)
           }
+  val CAT_HOUSE: CatHouse by REGISTRY.registerBlock("cat_house", ::CatHouse)
+  val CAT_HOUSE_ENTITY: BlockEntityType<CatHouseEntity> by
+          BE_REGISTRY.register("cat_house") { ->
+            BlockEntityType(::CatHouseEntity, CAT_HOUSE)
+          }
 }
