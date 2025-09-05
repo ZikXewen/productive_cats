@@ -29,15 +29,16 @@ class CatBreedingRecipe(val result: String, val parent1: String, val parent2: St
   class Input(val parent1: String, val parent2: String): RecipeInput {
     override fun getItem(slot: Int) = ItemStack.EMPTY
     override fun size() = 0
+    override fun isEmpty() = false
   }
 
   class Serializer: RecipeSerializer<CatBreedingRecipe> {
     companion object {
       val CODEC: MapCodec<CatBreedingRecipe> = RecordCodecBuilder.mapCodec {
         it.group(
+          Codec.STRING.fieldOf("result").forGetter(CatBreedingRecipe::result),
           Codec.STRING.fieldOf("parent1").forGetter(CatBreedingRecipe::parent1),
           Codec.STRING.fieldOf("parent2").forGetter(CatBreedingRecipe::parent2),
-          Codec.STRING.fieldOf("result").forGetter(CatBreedingRecipe::result),
           Codec.DOUBLE.fieldOf("chance").forGetter(CatBreedingRecipe::chance)
         ).apply(it, ::CatBreedingRecipe)
       }

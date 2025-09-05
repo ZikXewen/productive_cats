@@ -48,9 +48,9 @@ class CatHouse(props: BlockBehaviour.Properties) : Block(props), EntityBlock {
     hitResult: BlockHitResult
   ): InteractionResult {
     val be = level.getBlockEntity(pos)
-    if (be !is CatHouseEntity || level.isClientSide)
+    if (be !is CatHouseEntity)
       return super.useWithoutItem(state, level, pos, player, hitResult)
-    be.useWithoutItem(level, pos)
+    if (!level.isClientSide) be.useWithoutItem(level, pos)
     return InteractionResult.SUCCESS
   }
 }

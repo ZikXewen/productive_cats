@@ -59,6 +59,7 @@ class CatHouseEntity(pos: BlockPos, state: BlockState) :
       val recipe = level.recipeAccess().getRecipeFor(RecipeRegistries.CAT_PRODUCE_TYPE, input, level).getOrNull()
       if (recipe == null) return
       recipe.value().result.forEach {
+        if (level.random.nextFloat() * 100.0 >= it.chance) return@forEach
         val count = level.random.nextIntBetweenInclusive(it.min, it.max) * cat.productivity
         val stack = ItemStack(it.item, count)
         be.itemHandler.tryInsertItem(stack)

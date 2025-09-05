@@ -63,10 +63,11 @@ class CatBreederEntity(pos: BlockPos, state: BlockState) :
       cat?.setData(DataRegistries.CAT_DATA_ATTACHMENT, childData)
     }
     private fun getChild(val1: Int, val2: Int, random: RandomSource): Int {
-      if (val1 == val2) return val1
-      val min = val1.coerceAtLeast(val2)
-      val max = val1.coerceAtMost(val2)
-      return (random.nextIntBetweenInclusive(min, max) + random.nextIntBetweenInclusive(-2, 2)).coerceAtLeast(1).coerceAtMost(10)
+      val min = val1.coerceAtMost(val2)
+      val max = val1.coerceAtLeast(val2)
+      val base = random.nextIntBetweenInclusive(min, max)
+      val bias = random.nextIntBetweenInclusive(-2, 2)
+      return (base + bias).coerceAtLeast(1).coerceAtMost(10)
     }
   }
 }

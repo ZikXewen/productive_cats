@@ -19,7 +19,7 @@ class CatProduceRecipeProvider(registries: HolderLookup.Provider, output: Recipe
         RecipeProvider(registries, output) {
   override fun buildRecipes() {
     Builder("test_cat_1").add(Items.OAK_LOG, 4).save(output)
-    Builder("test_cat_3").add(Items.DIAMOND, 50.0, 2, 4).save(output)
+    Builder("test_cat_3").add(Items.DIAMOND, 50.0, 2, 4).add(Items.GOLD_INGOT, 1, 3).save(output)
     Builder("test_cat_4").add(Items.ANCIENT_DEBRIS, 20.0, 1).save(output)
   }
   class Runner(output: PackOutput, registries: CompletableFuture<HolderLookup.Provider>) :

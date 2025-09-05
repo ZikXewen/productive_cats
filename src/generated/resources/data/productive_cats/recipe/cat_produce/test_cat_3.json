@@ -7,6 +7,11 @@
       "item": "minecraft:diamond",
       "max": 4,
       "min": 2
+    },
+    {
+      "item": "minecraft:gold_ingot",
+      "max": 3,
+      "min": 1
     }
   ]
 }
