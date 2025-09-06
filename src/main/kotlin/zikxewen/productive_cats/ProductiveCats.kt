@@ -25,5 +25,6 @@ object ProductiveCats {
     BlockRegistries.REGISTRY.register(MOD_BUS)
     BlockRegistries.BE_REGISTRY.register(MOD_BUS)
     ItemRegistries.REGISTRY.register(MOD_BUS)
+    ItemRegistries.TAB_REGISTRY.register(MOD_BUS)
   }
 }

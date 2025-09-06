@@ -10,6 +10,7 @@ import zikxewen.productive_cats.common.item.ItemRegistries
 class EnUsLanguageProvider(val output: PackOutput) :
         LanguageProvider(output, ProductiveCats.MOD_ID, "en_us") {
   override fun addTranslations() {
+    add(ProductiveCats.MOD_ID, "Productive Cats")
     add(ItemRegistries.CAT_HOLDER, "Cat Holder")
     add(BlockRegistries.CAT_BREEDER, "Cat Breeder")
     add(BlockRegistries.CAT_HOUSE, "Cat House")
