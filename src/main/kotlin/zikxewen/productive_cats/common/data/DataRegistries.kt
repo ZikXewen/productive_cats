@@ -2,6 +2,8 @@ package zikxewen.productive_cats.common.data
 
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.Registries
+import net.minecraft.core.Registry
+import net.minecraft.resources.ResourceKey
 import net.neoforged.neoforge.attachment.AttachmentType
 import net.neoforged.neoforge.registries.DeferredRegister
 import net.neoforged.neoforge.registries.NeoForgeRegistries
@@ -16,6 +18,7 @@ object DataRegistries {
           )
   val ATTACHMENT_REGISTRY =
           DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, ProductiveCats.MOD_ID)
+  val CAT_TYPE_KEY: ResourceKey<Registry<CatType>> = ResourceKey.createRegistryKey(ProductiveCats.rl("cat_type"))
   val CAT_DATA_COMPONENT: DataComponentType<CatData> by
           COMPONENT_REGISTRY.registerComponentType("cat_data") {
             it.persistent(CatData.CODEC).networkSynchronized(CatData.STREAM_CODEC)
