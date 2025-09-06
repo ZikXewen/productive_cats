@@ -14,13 +14,14 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.Recipe
 import zikxewen.productive_cats.ProductiveCats
 import zikxewen.productive_cats.common.recipe.CatProduceRecipe
+import zikxewen.productive_cats.data.cat.CatTypeProvider as Cats
 
 class CatProduceRecipeProvider(registries: HolderLookup.Provider, output: RecipeOutput) :
         RecipeProvider(registries, output) {
   override fun buildRecipes() {
-    Builder("test_cat_1").add(Items.OAK_LOG, 4).save(output)
-    Builder("test_cat_3").add(Items.DIAMOND, 50.0, 2, 4).add(Items.GOLD_INGOT, 1, 3).save(output)
-    Builder("test_cat_4").add(Items.ANCIENT_DEBRIS, 20.0, 1).save(output)
+    Builder(Cats.OAK_LOG.type).add(Items.OAK_LOG, 4).save(output)
+    Builder(Cats.SHINY.type).add(Items.DIAMOND, 50.0, 2, 4).add(Items.GOLD_INGOT, 1, 3).save(output)
+    Builder(Cats.ANCIENT.type).add(Items.ANCIENT_DEBRIS, 20.0, 1).save(output)
   }
   class Runner(output: PackOutput, registries: CompletableFuture<HolderLookup.Provider>) :
           RecipeProvider.Runner(output, registries) {

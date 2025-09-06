@@ -9,27 +9,28 @@ import zikxewen.productive_cats.common.data.CatType
 import zikxewen.productive_cats.common.data.DataRegistries
 
 object CatTypeProvider {
+  val OAK_LOG = Builder("oak_log", 0, 0)
+  val DUMMY = Builder("dummy", 0, 0)
+  val SHINY = Builder("shiny", 0, 0)
+  val ANCIENT = Builder("test_cat_4", 0, 0).unique().rarity(Rarity.EPIC)
   val builder =
     RegistrySetBuilder().add(DataRegistries.CAT_TYPE_KEY) {
-      it.addCat(Builder("test_cat_1", 0, 0))
-      it.addCat(Builder("test_cat_2", 0, 0))
-      it.addCat(Builder("test_cat_3", 0, 0))
-      it.addCat(Builder("test_cat_4", 0, 0).unique().rarity(Rarity.EPIC))
+      OAK_LOG.save(it)
+      DUMMY.save(it)
+      SHINY.save(it)
+      ANCIENT.save(it)
     }
-  fun BootstrapContext<CatType>.addCat(builder: Builder) =
-    this.register(
-      ResourceKey.create(DataRegistries.CAT_TYPE_KEY, ProductiveCats.rl(builder.type.type)),
-      builder.type
-    )
   class Builder(
-    type: String,
-    primaryColor: Int,
-    secondaryColor: Int,
-    unique: Boolean = false,
-    rarity: Rarity = Rarity.COMMON
+    val type: String,
+    val primaryColor: Int,
+    val secondaryColor: Int,
   ) {
-    val type = CatType(type, primaryColor, secondaryColor, unique, rarity)
-    fun unique() = apply { type.unique = true }
-    fun rarity(rarity: Rarity) = apply { type.rarity = rarity }
+    var unique = false
+    var rarity = Rarity.COMMON
+    val key = ResourceKey.create(DataRegistries.CAT_TYPE_KEY, ProductiveCats.rl(type))
+    fun unique() = apply { this.unique = true }
+    fun rarity(rarity: Rarity) = apply { this.rarity = rarity }
+    fun save(bootstrap: BootstrapContext<CatType>) =
+      bootstrap.register(key, CatType(type, primaryColor, secondaryColor, unique, rarity))
   }
 }
