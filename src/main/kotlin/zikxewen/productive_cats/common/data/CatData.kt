@@ -8,11 +8,13 @@ import net.minecraft.network.codec.StreamCodec
 import zikxewen.productive_cats.ProductiveCats
 
 data class CatData(val type: String, val speed: Int, val productivity: Int) {
-  val name: Component by lazy { Component.translatable(getNameKey(type)) }
-  val display: Component by lazy { Component.translatable(DISPLAY_KEY, name, speed, productivity) }
+  val name get() = Component.translatable(getNameKey(type))
+  val display get() = Component.translatable(DISPLAY_KEY, name, speed, productivity)
   companion object {
     fun getNameKey(type: String) = "cat.${ProductiveCats.MOD_ID}.${type}" 
-    val DISPLAY_KEY = "cat.${ProductiveCats.MOD_ID}"
+    val DISPLAY_KEY = "tooltip.${ProductiveCats.MOD_ID}.cat_data"
+    val HELD_KEY = "tooltip.${ProductiveCats.MOD_ID}.held"
+    val HELD_TEXT = Component.translatable(HELD_KEY)
     val DEFAULT = CatData("default", 1, 1)
     val CODEC = RecordCodecBuilder.create {
       it.group(
