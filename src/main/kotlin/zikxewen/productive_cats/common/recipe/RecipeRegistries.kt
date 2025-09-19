@@ -7,7 +7,6 @@ import net.minecraft.world.item.crafting.RecipeType
 import net.neoforged.neoforge.registries.DeferredRegister
 import thedarkcolour.kotlinforforge.neoforge.forge.getValue
 import zikxewen.productive_cats.ProductiveCats
-import zikxewen.productive_cats.common.recipe.CatProduceRecipe
 
 object RecipeRegistries {
   val TYPE_REGISTRY = DeferredRegister.create(Registries.RECIPE_TYPE, ProductiveCats.MOD_ID)

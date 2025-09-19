@@ -12,15 +12,16 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.Recipe
 import zikxewen.productive_cats.ProductiveCats
+import zikxewen.productive_cats.common.cat.CatType
 import zikxewen.productive_cats.common.recipe.CatBreedingRecipe
 import zikxewen.productive_cats.data.cat.CatTypeProvider as Cats
 
 class CatBreedingRecipeProvider(registries: HolderLookup.Provider, output: RecipeOutput) :
         RecipeProvider(registries, output) {
   override fun buildRecipes() {
-    Builder(Cats.DUMMY.type, Cats.OAK_LOG.type, Cats.OAK_LOG.type).save(output)
-    Builder(Cats.SHINY.type, Cats.OAK_LOG.type, Cats.DUMMY.type).save(output)
-    Builder(Cats.ANCIENT.type, Cats.DUMMY.type, Cats.DUMMY.type).chance(50.0).save(output)
+    Builder(Cats.DUMMY, Cats.OAK_LOG, Cats.OAK_LOG).save(output)
+    Builder(Cats.SHINY, Cats.OAK_LOG, Cats.DUMMY).save(output)
+    Builder(Cats.ANCIENT, Cats.DUMMY, Cats.DUMMY).chance(50.0).save(output)
   }
   class Runner(output: PackOutput, registries: CompletableFuture<HolderLookup.Provider>) :
           RecipeProvider.Runner(output, registries) {
@@ -28,7 +29,7 @@ class CatBreedingRecipeProvider(registries: HolderLookup.Provider, output: Recip
     override fun createRecipeProvider(registries: HolderLookup.Provider, output: RecipeOutput) =
             CatBreedingRecipeProvider(registries, output)
   }
-  class Builder(val result: String, val parent1: String, val parent2: String) : RecipeBuilder {
+  class Builder(val result: CatType, val parent1: CatType, val parent2: CatType) : RecipeBuilder {
     var group: String? = null
     var chance = 100.0
     override fun getResult() = Items.AIR

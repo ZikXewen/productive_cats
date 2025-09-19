@@ -3,30 +3,30 @@ package zikxewen.productive_cats.common.data
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.Style
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
+import net.minecraft.world.item.DyeColor
 import zikxewen.productive_cats.ProductiveCats
+import zikxewen.productive_cats.common.cat.CatType
 
-data class CatData(val type: String, val speed: Int, val productivity: Int) {
-  val name get() = Component.translatable(getNameKey(type))
-  val display get() = Component.translatable(DISPLAY_KEY, name, speed, productivity)
+data class CatData(val type: CatType, val speed: Int, val productivity: Int) {
+  val displayText get() = Component.translatable("tooltip.${ProductiveCats.MOD_ID}.cat_data", type.displayText, speed, productivity)
   companion object {
-    fun getNameKey(type: String) = "cat.${ProductiveCats.MOD_ID}.${type}" 
-    val DISPLAY_KEY = "tooltip.${ProductiveCats.MOD_ID}.cat_data"
-    val HELD_KEY = "tooltip.${ProductiveCats.MOD_ID}.held"
-    val HELD_TEXT = Component.translatable(HELD_KEY)
-    val DEFAULT = CatData("default", 1, 1)
+    val HELD_TEXT = Component.translatable("tooltip.${ProductiveCats.MOD_ID}.held").withStyle(Style.EMPTY.withColor(DyeColor.GRAY.textColor))
+    val DEFAULT = CatData(CatType.DEFAULT, 0, 0)
     val CODEC = RecordCodecBuilder.create {
       it.group(
-        Codec.STRING.fieldOf("type").forGetter(CatData::type),
+        CatType.CODEC.fieldOf("type").forGetter(CatData::type),
         Codec.INT.fieldOf("speed").forGetter(CatData::speed),
         Codec.INT.fieldOf("productivity").forGetter(CatData::productivity),
       ).apply(it, ::CatData)
     }
     val STREAM_CODEC = StreamCodec.composite(
-      ByteBufCodecs.STRING_UTF8, CatData::type, 
+      CatType.STREAM_CODEC, CatData::type,
       ByteBufCodecs.INT, CatData::speed, 
-      ByteBufCodecs.INT, CatData::productivity, ::CatData
+      ByteBufCodecs.INT, CatData::productivity,
+      ::CatData
     )
   }
 }
