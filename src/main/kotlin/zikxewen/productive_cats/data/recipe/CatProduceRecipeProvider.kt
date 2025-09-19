@@ -13,8 +13,8 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.crafting.Recipe
 import zikxewen.productive_cats.ProductiveCats
-import zikxewen.productive_cats.common.recipe.CatProduceRecipe
 import zikxewen.productive_cats.common.cat.CatType
+import zikxewen.productive_cats.common.recipe.CatProduceRecipe
 import zikxewen.productive_cats.data.cat.CatTypeProvider as Cats
 
 class CatProduceRecipeProvider(registries: HolderLookup.Provider, output: RecipeOutput) :
@@ -30,18 +30,18 @@ class CatProduceRecipeProvider(registries: HolderLookup.Provider, output: Recipe
     override fun createRecipeProvider(registries: HolderLookup.Provider, output: RecipeOutput) =
             CatProduceRecipeProvider(registries, output)
   }
-  class Builder(val type: CatType) : RecipeBuilder {
+  class Builder(val cat: CatType) : RecipeBuilder {
     var group: String? = null
     var result: MutableList<CatProduceRecipe.Output> = mutableListOf()
     override fun getResult() = Items.AIR
     override fun unlockedBy(name: String, criterion: Criterion<*>) = this
     override fun group(name: String?) = apply { this.group = name }
     override fun save(output: RecipeOutput, key: ResourceKey<Recipe<*>>) {
-      val recipe = CatProduceRecipe(result, type)
+      val recipe = CatProduceRecipe(result, cat)
       output.accept(key, recipe, null)
     }
     override fun save(output: RecipeOutput) {
-      val key = ResourceKey.create(Registries.RECIPE, ProductiveCats.rl("cat_produce/${type}"))
+      val key = ResourceKey.create(Registries.RECIPE, ProductiveCats.rl("cat_produce/${cat.type}"))
       save(output, key)
     }
     fun add(item: Item, chance: Double, min: Int, max: Int = min) = 

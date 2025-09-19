@@ -19,10 +19,9 @@ class EnUsLanguageProvider(val output: PackOutput) :
     add(EntityRegistries.PRODUCTIVE_CAT, "Productive Cat")
     add(CatData.HELD_KEY, "Held Cat")
     add(CatData.DISPLAY_KEY, "%s - Speed %s, Productivity %s")
-    add(CatData.getNameKey(Cats.OAK_LOG.type), "Oak Cat")
-    add(CatData.getNameKey(Cats.DUMMY.type), "Dummy Cat")
-    add(CatData.getNameKey(Cats.SHINY.type), "Shiny Cat")
-    add(CatData.getNameKey(Cats.ANCIENT.type), "Ancient Cat")
-    // TODO: Find a way to rename cats per type
+    add(Cats.OAK_LOG.displayKey, "Oak Cat")
+    add(Cats.DUMMY.displayKey, "Dummy Cat")
+    add(Cats.SHINY.displayKey, "Shiny Cat")
+    add(Cats.ANCIENT.displayKey, "Ancient Cat")
   }
 }

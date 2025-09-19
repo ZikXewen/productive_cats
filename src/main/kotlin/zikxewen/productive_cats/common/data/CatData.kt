@@ -11,9 +11,11 @@ import zikxewen.productive_cats.ProductiveCats
 import zikxewen.productive_cats.common.cat.CatType
 
 data class CatData(val type: CatType, val speed: Int, val productivity: Int) {
-  val displayText get() = Component.translatable("tooltip.${ProductiveCats.MOD_ID}.cat_data", type.displayText, speed, productivity)
+  val displayText get() = Component.translatable(DISPLAY_KEY, type.displayText, speed, productivity)
   companion object {
-    val HELD_TEXT = Component.translatable("tooltip.${ProductiveCats.MOD_ID}.held").withStyle(Style.EMPTY.withColor(DyeColor.GRAY.textColor))
+    val DISPLAY_KEY = "tooltip.${ProductiveCats.MOD_ID}.cat_data"
+    val HELD_KEY = "tooltip.${ProductiveCats.MOD_ID}.held"
+    val HELD_TEXT = Component.translatable(HELD_KEY).withStyle(Style.EMPTY.withColor(DyeColor.GRAY.textColor))
     val DEFAULT = CatData(CatType.DEFAULT, 0, 0)
     val CODEC = RecordCodecBuilder.create {
       it.group(

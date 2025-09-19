@@ -12,10 +12,12 @@ import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import zikxewen.productive_cats.common.data.DataRegistries
 
 // No taming, no in-world breeding
 class ProductiveCat(entityType: EntityType<out ProductiveCat>, level: Level) :
         Animal(entityType, level) {
+  val catType get() = getData(DataRegistries.CAT_DATA_ATTACHMENT).type
   companion object {
     fun createAttributes() =
             Animal.createAnimalAttributes()

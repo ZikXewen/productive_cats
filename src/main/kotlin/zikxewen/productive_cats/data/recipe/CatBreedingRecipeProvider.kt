@@ -43,7 +43,7 @@ class CatBreedingRecipeProvider(registries: HolderLookup.Provider, output: Recip
     fun save(output: RecipeOutput, variant: Int) {
       val key = ResourceKey.create(
         Registries.RECIPE, 
-        ProductiveCats.rl("cat_breeding/${result}_${variant}")
+        ProductiveCats.rl("cat_breeding/${result.type}_${variant}")
       )
       save(output, key)
     }
