@@ -1,6 +1,6 @@
 {
   "type": "productive_cats:cat_produce",
-  "cat": "oak_log",
+  "cat": "productive_cats:oak_log",
   "result": [
     {
       "item": "minecraft:oak_log",

@@ -1,0 +1,7 @@
+{
+  "type": "productive_cats:cat_breeding",
+  "chance": 50.0,
+  "parent1": "productive_cats:dummy",
+  "parent2": "productive_cats:dummy",
+  "result": "productive_cats:ancient"
+}

@@ -1,6 +1,6 @@
 {
   "type": "productive_cats:cat_produce",
-  "cat": "shiny",
+  "cat": "productive_cats:shiny",
   "result": [
     {
       "chance": 50.0,

@@ -25,5 +25,9 @@ object EventHandler {
           ) { be, _ -> be.itemHandler }
   @SubscribeEvent
   fun registerCatType(event: DataPackRegistryEvent.NewRegistry) =
-          event.dataPackRegistry(CatRegistries.CAT_TYPE_REGISTRY, CatType.CODEC, CatType.CODEC)
+          event.dataPackRegistry(
+                  CatRegistries.CAT_TYPE_REGISTRY,
+                  CatType.DIRECT_CODEC.codec(),
+                  CatType.DIRECT_CODEC.codec()
+          )
 }

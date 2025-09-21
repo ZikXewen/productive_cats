@@ -18,7 +18,7 @@ class ProductiveCatRenderer(ctx: EntityRendererProvider.Context) :
   override fun extractRenderState(cat: ProductiveCat, state: CatRenderState, scale: Float) {
     super.extractRenderState(cat, state, scale)
     state.apply {
-      texture = cat.catType.texture.texturePath()
+      texture = cat.catType.value().texture.texturePath()
       isCrouching = cat.isCrouching()
       isSprinting = cat.isSprinting()
     }

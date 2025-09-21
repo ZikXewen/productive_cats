@@ -1,10 +1,9 @@
 package zikxewen.productive_cats.common.recipe
 
 import com.mojang.serialization.Codec
-import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import net.minecraft.core.Holder
 import net.minecraft.core.HolderLookup
-import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.item.ItemStack
@@ -16,18 +15,18 @@ import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.level.Level
 import zikxewen.productive_cats.common.cat.CatType
 
-class CatBreedingRecipe(val result: CatType, val parent1: CatType, val parent2: CatType, val chance: Double): Recipe<CatBreedingRecipe.Input> {
+class CatBreedingRecipe(val result: Holder<CatType>, val parent1: Holder<CatType>, val parent2: Holder<CatType>, val chance: Double): Recipe<CatBreedingRecipe.Input> {
   override fun getSerializer() = RecipeRegistries.CAT_BREEDING_SERIALIZER
   override fun getType() = RecipeRegistries.CAT_BREEDING_TYPE
   override fun recipeBookCategory() = RecipeRegistries.CAT_BREEDING_CATEGORY
   override fun isSpecial() = true
-  override fun assemble(input: CatBreedingRecipe.Input, registries: HolderLookup.Provider) = ItemStack.EMPTY
+  override fun assemble(input: Input, registries: HolderLookup.Provider) = ItemStack.EMPTY
   override fun placementInfo() = PlacementInfo.NOT_PLACEABLE
-  override fun matches(input: CatBreedingRecipe.Input, level: Level) =
+  override fun matches(input: Input, level: Level) =
     (input.parent1 == parent1 && input.parent2 == parent2) ||
     (input.parent1 == parent2 && input.parent2 == parent1)
 
-  class Input(val parent1: CatType, val parent2: CatType): RecipeInput {
+  class Input(val parent1: Holder<CatType>, val parent2: Holder<CatType>): RecipeInput {
     override fun getItem(slot: Int) = ItemStack.EMPTY
     override fun size() = 0
     override fun isEmpty() = false
@@ -43,7 +42,13 @@ class CatBreedingRecipe(val result: CatType, val parent1: CatType, val parent2: 
           Codec.DOUBLE.fieldOf("chance").forGetter(CatBreedingRecipe::chance)
         ).apply(it, ::CatBreedingRecipe)
       }
-      val STREAM_CODEC = ByteBufCodecs.fromCodecWithRegistries(CODEC.codec())
+      val STREAM_CODEC = StreamCodec.composite(
+        CatType.STREAM_CODEC, CatBreedingRecipe::result,
+        CatType.STREAM_CODEC, CatBreedingRecipe::parent1,
+        CatType.STREAM_CODEC, CatBreedingRecipe::parent2,
+        ByteBufCodecs.DOUBLE, CatBreedingRecipe::chance,
+        ::CatBreedingRecipe
+      )
     }
     override fun codec() = CODEC
     override fun streamCodec() = STREAM_CODEC

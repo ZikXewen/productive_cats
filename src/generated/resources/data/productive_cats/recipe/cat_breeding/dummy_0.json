@@ -1,7 +1,7 @@
 {
   "type": "productive_cats:cat_breeding",
   "chance": 100.0,
-  "parent1": "oak_log",
-  "parent2": "oak_log",
-  "result": "dummy"
+  "parent1": "productive_cats:oak_log",
+  "parent2": "productive_cats:oak_log",
+  "result": "productive_cats:dummy"
 }

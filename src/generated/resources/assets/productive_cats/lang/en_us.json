@@ -1,10 +1,10 @@
 {
   "block.productive_cats.cat_breeder": "Cat Breeder",
   "block.productive_cats.cat_house": "Cat House",
+  "cat.productive_cats.ancient": "Ancient Cat",
   "cat.productive_cats.dummy": "Dummy Cat",
   "cat.productive_cats.oak_log": "Oak Cat",
   "cat.productive_cats.shiny": "Shiny Cat",
-  "cat.productive_cats.test_cat_4": "Ancient Cat",
   "entity.productive_cats.productive_cat": "Productive Cat",
   "item.productive_cats.cat_holder": "Cat Holder",
   "productive_cats": "Productive Cats",

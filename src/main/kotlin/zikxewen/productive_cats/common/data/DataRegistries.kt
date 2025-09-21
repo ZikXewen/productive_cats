@@ -18,14 +18,20 @@ object DataRegistries {
           DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, ProductiveCats.MOD_ID)
   val CAT_DATA_COMPONENT: DataComponentType<CatData> by
           COMPONENT_REGISTRY.registerComponentType("cat_data") {
-            it.persistent(CatData.CODEC).networkSynchronized(CatData.STREAM_CODEC)
+            it.persistent(CatData.CODEC.codec()).networkSynchronized(CatData.STREAM_CODEC)
           }
   val CAT_DATA_ATTACHMENT: AttachmentType<CatData> by
           ATTACHMENT_REGISTRY.register("cat_data") { ->
-            AttachmentType.builder { -> CatData.DEFAULT }.sync(CatData.STREAM_CODEC).build()
+            AttachmentType.builder { -> CatData.DEFAULT }
+                    .serialize(CatData.CODEC)
+                    .sync(CatData.STREAM_CODEC)
+                    .build()
           }
   val CAT_DATA_ATTACHMENT_2: AttachmentType<CatData> by
           ATTACHMENT_REGISTRY.register("cat_data_2") { ->
-            AttachmentType.builder { -> CatData.DEFAULT }.sync(CatData.STREAM_CODEC).build()
+            AttachmentType.builder { -> CatData.DEFAULT }
+                    .serialize(CatData.CODEC)
+                    .sync(CatData.STREAM_CODEC)
+                    .build()
           }
 }

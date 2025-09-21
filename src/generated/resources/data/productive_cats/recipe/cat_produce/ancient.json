@@ -1,6 +1,6 @@
 {
   "type": "productive_cats:cat_produce",
-  "cat": "test_cat_4",
+  "cat": "productive_cats:ancient",
   "result": [
     {
       "chance": 20.0,
