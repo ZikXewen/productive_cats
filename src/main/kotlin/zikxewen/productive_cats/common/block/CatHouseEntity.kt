@@ -3,15 +3,19 @@ package zikxewen.productive_cats.common.block
 import kotlin.jvm.optionals.getOrNull
 import net.minecraft.core.BlockPos
 import net.minecraft.core.NonNullList
+import net.minecraft.core.component.DataComponents
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.Containers
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import net.neoforged.neoforge.items.ItemStackHandler
-import zikxewen.productive_cats.common.data.DataRegistries
+import zikxewen.productive_cats.common.data.CatData
 import zikxewen.productive_cats.common.recipe.CatProduceRecipe
 import zikxewen.productive_cats.common.recipe.RecipeRegistries
 
@@ -21,14 +25,23 @@ class CatHouseEntity(pos: BlockPos, state: BlockState) :
   var progress = 0
   val inventory = NonNullList.withSize(9, ItemStack.EMPTY)
   val itemHandler = ItemHandler(inventory)
+  var customData: CustomData? = null
+  override fun saveAdditional(output: ValueOutput) {
+    super.saveAdditional(output)
+    output.storeNullable("custom_data", CustomData.CODEC, customData)
+  }
+  override fun loadAdditional(input: ValueInput) {
+    super.loadAdditional(input)
+    customData = input.read("custom_data", CustomData.CODEC).getOrNull()
+  }
   fun useHolder(stack: ItemStack) {
-    val heldCat = stack.get(DataRegistries.CAT_DATA_COMPONENT)
-    if (heldCat == null) {
-      var beCat = this.removeData(DataRegistries.CAT_DATA_ATTACHMENT)
-      if (beCat != null) stack.set(DataRegistries.CAT_DATA_COMPONENT, beCat)
-    } else if (!this.hasData(DataRegistries.CAT_DATA_ATTACHMENT)) {
-      this.setData(DataRegistries.CAT_DATA_ATTACHMENT, heldCat)
-      stack.remove(DataRegistries.CAT_DATA_COMPONENT)
+    val heldData = stack.get(DataComponents.ENTITY_DATA)
+    if (heldData == null && customData != null) {
+      stack.set(DataComponents.ENTITY_DATA, customData)
+      customData = null
+    } else if (customData == null && heldData != null) {
+      customData = heldData
+      stack.remove(DataComponents.ENTITY_DATA)
     }
   }
   fun useWithoutItem(level: Level, pos: BlockPos) {
@@ -48,13 +61,13 @@ class CatHouseEntity(pos: BlockPos, state: BlockState) :
     ) {
       if (level !is ServerLevel || ++be.cooldown < 20) return
       be.cooldown = 0
-      if (!be.hasData(DataRegistries.CAT_DATA_ATTACHMENT)) {
+      val cat = CatData.from(be.customData)
+      if (cat == null) {
         be.progress = 0
         return
       }
       if (++be.progress < 10) return
       be.progress = 0
-      val cat = be.getData(DataRegistries.CAT_DATA_ATTACHMENT)
       val input = CatProduceRecipe.Input(cat.type)
       val recipe = level.recipeAccess().getRecipeFor(RecipeRegistries.CAT_PRODUCE_TYPE, input, level).getOrNull()
       if (recipe == null) return

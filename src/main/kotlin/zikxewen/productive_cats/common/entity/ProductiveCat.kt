@@ -1,5 +1,6 @@
 package zikxewen.productive_cats.common.entity
 
+import net.minecraft.core.component.DataComponents
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.ItemTags
@@ -12,12 +13,11 @@ import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
-import zikxewen.productive_cats.common.data.DataRegistries
+import zikxewen.productive_cats.common.data.CatData
 
 // No taming, no in-world breeding
 class ProductiveCat(entityType: EntityType<out ProductiveCat>, level: Level) :
         Animal(entityType, level) {
-  val catType get() = getData(DataRegistries.CAT_DATA_ATTACHMENT).type
   companion object {
     fun createAttributes() =
             Animal.createAnimalAttributes()
@@ -30,7 +30,7 @@ class ProductiveCat(entityType: EntityType<out ProductiveCat>, level: Level) :
     goalSelector.addGoal(1, PanicGoal(this, 1.5))
     goalSelector.addGoal(2, TemptGoal(this, 1.0, { it.`is`(ItemTags.CAT_FOOD) }, false))
     goalSelector.addGoal(3, WaterAvoidingRandomStrollGoal(this, 0.8, 1E-5F))
-    goalSelector.addGoal(1, LookAtPlayerGoal(this, Player::class.java, 10.0F))
+    goalSelector.addGoal(4, LookAtPlayerGoal(this, Player::class.java, 10.0F))
   }
   override fun getBreedOffspring(p0: ServerLevel, p1: AgeableMob) = null
   override fun isFood(p0: ItemStack) = false

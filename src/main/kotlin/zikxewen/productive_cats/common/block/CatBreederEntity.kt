@@ -1,15 +1,21 @@
 package zikxewen.productive_cats.common.block
 
+import kotlin.jvm.optionals.getOrNull
 import net.minecraft.core.BlockPos
+import net.minecraft.core.component.DataComponents
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import zikxewen.productive_cats.common.data.CatData
-import zikxewen.productive_cats.common.data.DataRegistries
 import zikxewen.productive_cats.common.entity.EntityRegistries
 import zikxewen.productive_cats.common.recipe.CatBreedingRecipe
 import zikxewen.productive_cats.common.recipe.RecipeRegistries
@@ -18,18 +24,36 @@ class CatBreederEntity(pos: BlockPos, state: BlockState) :
         BlockEntity(BlockRegistries.CAT_BREEDER_ENTITY, pos, state) {
   var cooldown = 0
   var progress = 0
+  var customData: CustomData? = null
+  var customData2: CustomData? = null
+  override fun saveAdditional(output: ValueOutput) {
+    super.saveAdditional(output)
+    output.storeNullable("custom_data", CustomData.CODEC, customData)
+    output.storeNullable("custom_data_2", CustomData.CODEC, customData2)
+  }
+  override fun loadAdditional(input: ValueInput) {
+    super.loadAdditional(input)
+    customData = input.read("custom_data", CustomData.CODEC).getOrNull()
+    customData2 = input.read("custom_data_2", CustomData.CODEC).getOrNull()
+  }
   fun useHolder(stack: ItemStack) {
-    val heldCat = stack.get(DataRegistries.CAT_DATA_COMPONENT)
-    if (heldCat == null) {
-      var beCat = this.removeData(DataRegistries.CAT_DATA_ATTACHMENT_2)
-      if (beCat == null) beCat = this.removeData(DataRegistries.CAT_DATA_ATTACHMENT)
-      if (beCat != null) stack.set(DataRegistries.CAT_DATA_COMPONENT, beCat)
-    } else if (!this.hasData(DataRegistries.CAT_DATA_ATTACHMENT)) {
-      this.setData(DataRegistries.CAT_DATA_ATTACHMENT, heldCat)
-      stack.remove(DataRegistries.CAT_DATA_COMPONENT)
-    } else if (!this.hasData(DataRegistries.CAT_DATA_ATTACHMENT_2)) {
-      this.setData(DataRegistries.CAT_DATA_ATTACHMENT_2, heldCat)
-      stack.remove(DataRegistries.CAT_DATA_COMPONENT)
+    val heldData = stack.get(DataComponents.ENTITY_DATA)
+    if (heldData == null) {
+      if (customData2 != null) {
+        stack.set(DataComponents.ENTITY_DATA, customData2)
+        customData2 = null
+      } else if (customData != null) {
+        stack.set(DataComponents.ENTITY_DATA, customData)
+        customData = null
+      }
+    } else {
+      if (customData != null) {
+        customData = heldData
+        stack.remove(DataComponents.ENTITY_DATA)
+      } else if (customData2 != null) {
+        customData2 = heldData
+        stack.remove(DataComponents.ENTITY_DATA)
+      }
     }
   }
   companion object {
@@ -41,15 +65,14 @@ class CatBreederEntity(pos: BlockPos, state: BlockState) :
     ) {
       if (level !is ServerLevel || ++be.cooldown < 20) return
       be.cooldown = 0
-      if (!be.hasData(DataRegistries.CAT_DATA_ATTACHMENT) || 
-          !be.hasData(DataRegistries.CAT_DATA_ATTACHMENT_2)) {
+      val parent1 = CatData.from(be.customData)
+      val parent2 = CatData.from(be.customData2)
+      if (parent1 == null || parent2 == null) {
         be.progress = 0
         return
       }
       if (++be.progress < 10) return
       be.progress = 0
-      val parent1 = be.getData(DataRegistries.CAT_DATA_ATTACHMENT)
-      val parent2 = be.getData(DataRegistries.CAT_DATA_ATTACHMENT_2)
       val input = CatBreedingRecipe.Input(parent1.type, parent2.type)
       val matches = level.recipeAccess().recipeMap().getRecipesFor(RecipeRegistries.CAT_BREEDING_TYPE, input, level)
         .filter { level.random.nextDouble() * 100.0 < it.value().chance }.map{ it.value().result }.toList()
@@ -60,7 +83,7 @@ class CatBreederEntity(pos: BlockPos, state: BlockState) :
       val childProductivity = getChild(parent1.productivity, parent2.productivity, level.random)
       val childData = CatData(childType, childSpeed, childProductivity)
       val cat = EntityRegistries.PRODUCTIVE_CAT.spawn(level, pos, EntitySpawnReason.BREEDING)
-      cat?.setData(DataRegistries.CAT_DATA_ATTACHMENT, childData)
+      EntityType.updateCustomEntityTag(level, null, cat, childData.toCustomData())
     }
     private fun getChild(val1: Int, val2: Int, random: RandomSource): Int {
       val min = val1.coerceAtMost(val2)
