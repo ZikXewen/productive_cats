@@ -24,6 +24,7 @@ object ItemRegistries {
       .build()
   }
   val CAT_HOLDER: CatHolder by REGISTRY.registerItem("cat_holder", ::CatHolder)
+  val CAT_SPAWN_EGG: CatSpawnEgg by REGISTRY.registerItem("cat_spawn_egg", ::CatSpawnEgg)
   val CAT_BREEDER by REGISTRY.registerSimpleBlockItem("cat_breeder") { BlockRegistries.CAT_BREEDER }
   val CAT_HOUSE by REGISTRY.registerSimpleBlockItem("cat_house") { BlockRegistries.CAT_HOUSE }
 }
