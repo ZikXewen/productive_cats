@@ -1,6 +1,6 @@
 package zikxewen.productive_cats.common.entity
 
-import net.minecraft.core.component.DataComponents
+import kotlin.jvm.optionals.getOrNull
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.tags.ItemTags
@@ -13,14 +13,17 @@ import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import zikxewen.productive_cats.common.data.CatData
 
 // No taming, no in-world breeding
 class ProductiveCat(entityType: EntityType<out ProductiveCat>, level: Level) :
         Animal(entityType, level) {
+  var catData: CatData? = null
   companion object {
     fun createAttributes() =
-            Animal.createAnimalAttributes()
+            createAnimalAttributes()
                     .add(Attributes.MAX_HEALTH, 10.0)
                     .add(Attributes.MOVEMENT_SPEED, 0.3)
                     .add(Attributes.ATTACK_DAMAGE, 3.0)
@@ -42,4 +45,12 @@ class ProductiveCat(entityType: EntityType<out ProductiveCat>, level: Level) :
           }
   override fun getHurtSound(damageSource: DamageSource) = SoundEvents.CAT_HURT
   override fun getDeathSound() = SoundEvents.CAT_DEATH
+  override fun readAdditionalSaveData(input: ValueInput) {
+    super.readAdditionalSaveData(input)
+    catData = input.read("CatData", CatData.CODEC.codec()).getOrNull()
+  }
+  override fun addAdditionalSaveData(output: ValueOutput) {
+    super.addAdditionalSaveData(output)
+    output.storeNullable("CatData", CatData.CODEC.codec(), catData)
+  }
 }

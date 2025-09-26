@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.gameevent.GameEvent
 import zikxewen.productive_cats.common.data.CatData
 import zikxewen.productive_cats.common.entity.EntityRegistries
+import zikxewen.productive_cats.common.entity.ProductiveCat
 
 class CatHolder(props: Properties) : Item(props.stacksTo(1)) {
   override fun interactLivingEntity(
@@ -29,11 +30,12 @@ class CatHolder(props: Properties) : Item(props.stacksTo(1)) {
     hand: InteractionHand
   ): InteractionResult {
     super.interactLivingEntity(stack, player, entity, hand)
-    val data = entity.get(DataComponents.ENTITY_DATA)
-    if (data == null || entity.type != EntityRegistries.PRODUCTIVE_CAT || stack.get(DataComponents.ENTITY_DATA) != null) return InteractionResult.PASS
+    if (entity !is ProductiveCat || entity.type != EntityRegistries.PRODUCTIVE_CAT) return InteractionResult.PASS // might be redundant
+    val data = entity.catData
+    if (data == null || stack.get(DataComponents.ENTITY_DATA) != null) return InteractionResult.PASS
     if (!player.level().isClientSide) {
       entity.remove(Entity.RemovalReason.DISCARDED)
-      player.getItemInHand(hand).set(DataComponents.ENTITY_DATA, data)
+      player.getItemInHand(hand).set(DataComponents.ENTITY_DATA, data.entityData)
     }
     return InteractionResult.SUCCESS
   }
@@ -59,6 +61,7 @@ class CatHolder(props: Properties) : Item(props.stacksTo(1)) {
     return InteractionResult.SUCCESS
   }
 
+  @Deprecated("Deprecated in Java")
   override fun appendHoverText(stack: ItemStack, ctx: TooltipContext, display: TooltipDisplay, adder: Consumer<Component>, flag: TooltipFlag) {
     val cat = CatData.from(stack.get(DataComponents.ENTITY_DATA))
     if (cat != null) {

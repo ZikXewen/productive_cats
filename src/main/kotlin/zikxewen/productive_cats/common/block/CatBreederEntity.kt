@@ -3,11 +3,9 @@ package zikxewen.productive_cats.common.block
 import kotlin.jvm.optionals.getOrNull
 import net.minecraft.core.BlockPos
 import net.minecraft.core.component.DataComponents
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.EntitySpawnReason
-import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.Level
@@ -82,8 +80,7 @@ class CatBreederEntity(pos: BlockPos, state: BlockState) :
       val childSpeed = getChild(parent1.speed, parent2.speed, level.random)
       val childProductivity = getChild(parent1.productivity, parent2.productivity, level.random)
       val childData = CatData(childType, childSpeed, childProductivity)
-      val cat = EntityRegistries.PRODUCTIVE_CAT.spawn(level, pos, EntitySpawnReason.BREEDING)
-      EntityType.updateCustomEntityTag(level, null, cat, childData.toCustomData())
+      EntityRegistries.PRODUCTIVE_CAT.spawn(level, { it.catData = childData }, pos, EntitySpawnReason.BREEDING, false, false)
     }
     private fun getChild(val1: Int, val2: Int, random: RandomSource): Int {
       val min = val1.coerceAtMost(val2)

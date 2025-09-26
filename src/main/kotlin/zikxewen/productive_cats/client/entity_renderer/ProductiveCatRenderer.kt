@@ -5,9 +5,7 @@ import net.minecraft.client.model.geom.ModelLayers
 import net.minecraft.client.renderer.entity.EntityRendererProvider
 import net.minecraft.client.renderer.entity.MobRenderer
 import net.minecraft.client.renderer.entity.state.CatRenderState
-import net.minecraft.core.component.DataComponents
 import zikxewen.productive_cats.common.cat.CatType
-import zikxewen.productive_cats.common.data.CatData
 import zikxewen.productive_cats.common.entity.ProductiveCat
 
 class ProductiveCatRenderer(ctx: EntityRendererProvider.Context) :
@@ -21,7 +19,7 @@ class ProductiveCatRenderer(ctx: EntityRendererProvider.Context) :
   override fun extractRenderState(cat: ProductiveCat, state: CatRenderState, scale: Float) {
     super.extractRenderState(cat, state, scale)
     state.apply {
-      val type = CatData.from(cat.get(DataComponents.ENTITY_DATA))?.type?.value() ?: CatType.DEFAULT
+      val type = cat.catData?.type?.value() ?: CatType.DEFAULT
       texture = type.texture.texturePath()
       isCrouching = cat.isCrouching()
       isSprinting = cat.isSprinting()
